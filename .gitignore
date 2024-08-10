@@ -25,4 +25,4 @@ yarn-error.log*
 
 .eslintcache
 .vscode
-public/assets
+src/assets
