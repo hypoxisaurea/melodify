@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +16,8 @@ const OutlineText = styled.div`
   line-height: 1.05;
   letter-spacing: -0.1rem;
   word-spacing: -0.5rem;
+  opacity: ${props => (props.fadeOut ? 0 : 1)};
+  transition: opacity 1s ease-in-out;
 `;
 
 const FullColorText = styled.span`
@@ -36,6 +38,8 @@ const PointEmojiText = styled.div`
   letter-spacing: -0.1rem;
   word-spacing: -0.5rem;
   margin-top: 2.5vh;
+  opacity: ${props => (props.fadeOut ? 0 : 1)};
+  transition: opacity 1s ease-in-out;
 `;
 
 const PointText = styled.span`
@@ -48,6 +52,8 @@ const GuideContainer = styled.div`
   display: flex;
   align-items: center;
   margin-top: 2.5vh;
+  opacity: ${props => (props.fadeOut ? 0 : 1)};
+  transition: opacity 1s ease-in-out;
 `;
 
 const GuideText = styled.div`
@@ -70,28 +76,39 @@ const ArrowImage = styled.img`
 `;
 
 function Splash() {
+  const [fadeOut, setFadeOut] = useState(false);
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/select');
+    setFadeOut(true);
   };
+
+  useEffect(() => {
+    if (fadeOut) {
+      const timer = setTimeout(() => {
+        navigate('/select');
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [fadeOut, navigate]);
 
   return (
     <SplashBackground onClick={handleClick}>
-      <OutlineText>I almost miss the</OutlineText>
-      <OutlineText>
+      <OutlineText fadeOut={fadeOut}>I almost miss the</OutlineText>
+      <OutlineText fadeOut={fadeOut}>
         <FullColorText>sound</FullColorText> of your voice
       </OutlineText>
-      <PointEmojiText>···</PointEmojiText>
-      <OutlineText>Find your own melody</OutlineText>
-      <OutlineText>
+      <PointEmojiText fadeOut={fadeOut}>···</PointEmojiText>
+      <OutlineText fadeOut={fadeOut}>Find your own melody</OutlineText>
+      <OutlineText fadeOut={fadeOut}>
         and draw <FullColorText>notes</FullColorText>
       </OutlineText>
-      <OutlineText>on the blank music paper</OutlineText>
-      <OutlineText>
+      <OutlineText fadeOut={fadeOut}>on the blank music paper</OutlineText>
+      <OutlineText fadeOut={fadeOut}>
         with <PointText>melodify</PointText>
       </OutlineText>
-      <GuideContainer>
+      <GuideContainer fadeOut={fadeOut}>
         <GuideText>Click anywhere to explore your notes</GuideText>
         <ArrowImage src={Arrow} alt="Arrow" />
       </GuideContainer>

@@ -1,11 +1,24 @@
-import React, { useRef } from 'react';
-import styled from 'styled-components';
+import React, { useRef, useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 import TurnTable from '../assets/images/turntable.png';
 import HoverSound from '../assets/sounds/angelical.mp3';
 import InputHeader from '../components/InputHeader';
 import DefaultBackground from '../components/DefaultBackground';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const PageContainer = styled.div`
+  animation: ${fadeIn} 1s ease-in-out;
+`;
 
 const GuideContainer = styled.div`
   display: flex;
@@ -68,18 +81,24 @@ function InputPage() {
 
   return (
     <DefaultBackground>
-      <InputHeader />
-      <MainImage
-        src={TurnTable}
-        onClick={handleImageClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      />
-      <HiddenInput type="file" ref={fileInputRef} onChange={handleFileChange} />
-      <audio ref={audioRef} src={HoverSound} />
-      <GuideContainer>
-        <GuideText>Insert Music</GuideText>
-      </GuideContainer>
+      <PageContainer>
+        <InputHeader />
+        <MainImage
+          src={TurnTable}
+          onClick={handleImageClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        />
+        <HiddenInput
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+        <audio ref={audioRef} src={HoverSound} />
+        <GuideContainer>
+          <GuideText>Insert Music</GuideText>
+        </GuideContainer>
+      </PageContainer>
     </DefaultBackground>
   );
 }
