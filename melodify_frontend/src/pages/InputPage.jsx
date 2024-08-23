@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
+import axios from 'axios';
+
 import TurnTable from '../assets/images/turntable.png';
 import HoverSound from '../assets/sounds/angelical.mp3';
 import InputHeader from '../components/InputHeader';
@@ -23,25 +25,28 @@ const PageContainer = styled.div`
 const GuideContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-top: 2.5vh;
 `;
 
 const GuideText = styled.div`
   color: #333;
-  font-family: 'Bohemian Soul';
-  font-size: 2.25rem;
-  font-weight: 100;
+  font-family: 'Voguella';
+  font-size: 2.5rem;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: 1.03;
   letter-spacing: -0.05rem;
   word-spacing: 0.5rem;
   margin-top: 3rem;
+  text-align: center;
 `;
 
 const MainImage = styled.img`
   width: 35vw;
   cursor: pointer;
+  display: block;
+  margin: 0 auto;
 `;
 
 const HiddenInput = styled.input`
@@ -57,18 +62,50 @@ function InputPage() {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
+
+    if (audioRef.current) {
+      audioRef.current.play().catch(error => {
+        console.error('Audio playback failed:', error);
+      });
+    }
   };
 
-  const handleFileChange = event => {
+  const handleFileChange = async event => {
     const file = event.target.files[0];
     if (file) {
-      console.log('Selected file:', file);
+      const validExtensions = ['audio/mp3', 'audio/wav'];
+      if (!validExtensions.includes(file.type)) {
+        alert('MP3 또는 WAV 파일만 업로드할 수 있습니다.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await axios.post(
+          'http://localhost:8000/upload',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+
+        const fileId = response.data.file_id;
+        navigate(`/output/${fileId}`);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
     }
   };
 
   const handleMouseEnter = () => {
     if (audioRef.current) {
-      audioRef.current.play();
+      audioRef.current.play().catch(error => {
+        console.error('Audio playback failed:', error);
+      });
     }
   };
 
@@ -96,7 +133,7 @@ function InputPage() {
         />
         <audio ref={audioRef} src={HoverSound} />
         <GuideContainer>
-          <GuideText>Insert Music</GuideText>
+          <GuideText>Select your LP</GuideText>
         </GuideContainer>
       </PageContainer>
     </DefaultBackground>

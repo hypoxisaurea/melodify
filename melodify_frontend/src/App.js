@@ -19,7 +19,7 @@ function App() {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Splash />} />
         <Route path="/select" element={<InputPage />} />
-        <Route path="/result" element={<OutputPage />} />
+        <Route path="/output/:fileId" element={<OutputPage />} />
       </Routes>
     </AnimatePresence>
   );
