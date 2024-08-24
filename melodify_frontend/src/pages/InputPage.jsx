@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
 
 import TurnTable from '../assets/images/turntable.png';
@@ -31,8 +30,9 @@ const GuideContainer = styled.div`
 
 const GuideText = styled.div`
   color: #333;
-  font-family: 'Voguella';
-  font-size: 2.5rem;
+  font-family: 'Bohemian Soul';
+  font-size: 2.25rem;
+  font-weight: 100;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: 1.03;
@@ -73,12 +73,6 @@ function InputPage() {
   const handleFileChange = async event => {
     const file = event.target.files[0];
     if (file) {
-      const validExtensions = ['audio/mp3', 'audio/wav'];
-      if (!validExtensions.includes(file.type)) {
-        alert('MP3 또는 WAV 파일만 업로드할 수 있습니다.');
-        return;
-      }
-
       const formData = new FormData();
       formData.append('file', file);
 
